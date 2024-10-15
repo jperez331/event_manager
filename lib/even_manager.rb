@@ -7,7 +7,15 @@ def clean_zipcode(zipcode)
 end
 
 def clean_phones(phone)
-  phone.to_s.rjust(10, '0')[0..9]
+  clean = phone.to_s.gsub(/\D/, '')
+  if clean.length < 10 || clean.length > 11
+    'This is a bad number'
+  elsif clean.length == 11 && clean[0] == '1'
+    clean = clean[1..-1]
+  else
+      clean
+  end
+
 end
 
 def legislators_by_zipcode(zip)
@@ -50,12 +58,12 @@ contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
-  phone = clean_phones(row[:HomePhone])
+  phone = clean_phones(row[:homephone])
   legislators = legislators_by_zipcode(zipcode)
 
   form_letter = erb_template.result(binding)
 
   save_thank_you_letter(id, form_letter)
 
-  puts row[:homephone]
+  puts phone
 end
