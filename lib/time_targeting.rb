@@ -1,4 +1,5 @@
 require 'CSV'
+require 'date'
 
 puts 'Time Targeting activated'
 
@@ -13,5 +14,5 @@ contents.each do |row|
   time = row[:regdate]
 
 
-  puts time
+  puts DateTime.strptime(time, '%m/%d/%Y %H:%M')
 end
